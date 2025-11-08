@@ -28,8 +28,6 @@ public class AuthService {
                 .rol(request.getRol())
                 .build();
 
-        System.out.println(usuario);
-
         usuarioRepository.save(usuario);
 
         var jwtToken = jwtService.generateToken(usuario);
