@@ -74,6 +74,34 @@ public class ProductoService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
+    public DataResponse<AllProductoResponse> productoById(Long idProducto) {
+        Producto producto = productoRepository.findById(idProducto).orElseThrow(
+                () -> new RuntimeException("Producto no encontrado")
+        );
+
+        AllProductoResponse productoResponse = new AllProductoResponse();
+
+        productoResponse.setIdProducto(producto.getIdProducto());
+        productoResponse.setNombre(producto.getNombre());
+        productoResponse.setDescripcion(producto.getDescripcion());
+        productoResponse.setPrecio(producto.getPrecioUnitario().doubleValue());
+        productoResponse.setCantidad(producto.getStockActual().longValue());
+        productoResponse.setNombreCategoria(producto.getCategoria() != null
+                ? producto.getCategoria().getNombreCategoria()
+                : null);
+
+        if (producto.getImagenes() != null && !producto.getImagenes().isEmpty()) {
+            productoResponse.setImagen(producto.getImagenes().get(0).getUrlImagen());
+        }
+
+        return DataResponse.<AllProductoResponse>builder()
+                .success(true)
+                .message("Producto obtenido correctamente")
+                .data(productoResponse)
+                .build();
+    }
+
     @Transactional
     public DataResponse<Object> subirImagen(Long idProducto, MultipartFile file) throws IOException {
         Producto producto = productoRepository.findById(idProducto).orElseThrow(
@@ -96,5 +124,7 @@ public class ProductoService {
                 .message("Imagen subida correctamente")
                 .build();
     }
+
+
 
 }

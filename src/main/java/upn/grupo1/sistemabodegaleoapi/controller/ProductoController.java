@@ -26,6 +26,12 @@ public class ProductoController {
         return ResponseEntity.ok(productoService.listarProductos(filtros));
     }
 
+    @GetMapping("/listar/{id}")
+    public ResponseEntity<DataResponse<AllProductoResponse>> productoById(
+            @PathVariable Long id) {
+        return ResponseEntity.ok(productoService.productoById(id));
+    }
+
     @PostMapping("/{id}/imagen")
     public ResponseEntity<DataResponse<Object>> subirImagen(
             @PathVariable Long id,
