@@ -1,22 +1,26 @@
 package upn.grupo1.sistemabodegaleoapi.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import upn.grupo1.sistemabodegaleoapi.dto.request.ListarProductoDto;
 import upn.grupo1.sistemabodegaleoapi.dto.response.AllProductoResponse;
 import upn.grupo1.sistemabodegaleoapi.dto.response.DataResponse;
 import upn.grupo1.sistemabodegaleoapi.model.ImagenProducto;
 import upn.grupo1.sistemabodegaleoapi.model.Producto;
 import upn.grupo1.sistemabodegaleoapi.repository.ImagenProductoRepository;
 import upn.grupo1.sistemabodegaleoapi.repository.ProductoRepository;
+import org.springframework.data.domain.Page;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -24,12 +28,31 @@ import java.util.UUID;
 public class ProductoService {
     private final ProductoRepository productoRepository;
     private final ImagenProductoRepository imagenProductoRepository;
-    private final CategoriaService categoriaService;
 
     @Transactional(readOnly = true)
-    public DataResponse<List<AllProductoResponse>> listarProductos() {
-        List<AllProductoResponse> productos = productoRepository.findAll()
-                .stream()
+    public DataResponse<Page<AllProductoResponse>> listarProductos(
+            ListarProductoDto filtros
+    ) {
+        Sort sort = filtros.getOrden().equalsIgnoreCase("desc")
+                ? Sort.by("precioUnitario").descending()
+                : Sort.by("precioUnitario").ascending();
+
+        Pageable pageable = PageRequest.of(filtros.getPagina(), filtros.getLimite(), sort);
+
+        Page<Producto> productoPage;
+
+        if (filtros.getCategoria() != null || filtros.getPrecioMin() != null || filtros.getPrecioMax() != null) {
+            productoPage = productoRepository.findByFiltros(
+                    filtros.getCategoria(),
+                    filtros.getPrecioMin(),
+                    filtros.getPrecioMax(),
+                    pageable
+            );
+        } else {
+            productoPage = productoRepository.findAll(pageable);
+        }
+
+        Page<AllProductoResponse> productos = productoPage
                 .map(producto -> AllProductoResponse.builder()
                         .idProducto(producto.getIdProducto())
                         .nombre(producto.getNombre())
@@ -42,10 +65,9 @@ public class ProductoService {
                         .nombreCategoria(producto.getCategoria() != null
                                 ? producto.getCategoria().getNombreCategoria()
                                 : null)
-                        .build())
-                .toList();
+                        .build());
 
-        return DataResponse.<List<AllProductoResponse>>builder()
+        return DataResponse.<Page<AllProductoResponse>>builder()
                 .success(true)
                 .message("Lista de productos obtenida correctamente")
                 .data(productos)
