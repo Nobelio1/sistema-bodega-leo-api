@@ -1,4 +1,4 @@
-package upn.grupo1.sistemabodegaleoapi.controller.dto.response;
+package upn.grupo1.sistemabodegaleoapi.controller.dto.response.categoriaRes;
 
 import lombok.*;
 
