@@ -7,7 +7,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import upn.grupo1.sistemabodegaleoapi.controller.dto.request.ListarProductoDto;
+import upn.grupo1.sistemabodegaleoapi.controller.dto.request.productoDto.ActualizarProductoDto;
+import upn.grupo1.sistemabodegaleoapi.controller.dto.request.productoDto.ActualizarStockDto;
+import upn.grupo1.sistemabodegaleoapi.controller.dto.request.productoDto.CrearProductoDto;
+import upn.grupo1.sistemabodegaleoapi.controller.dto.request.productoDto.ListarProductoDto;
 import upn.grupo1.sistemabodegaleoapi.controller.dto.response.AllProductoResponse;
 import upn.grupo1.sistemabodegaleoapi.controller.dto.response.DataResponse;
 import upn.grupo1.sistemabodegaleoapi.model.ImagenProducto;
@@ -15,6 +18,7 @@ import upn.grupo1.sistemabodegaleoapi.model.Producto;
 import upn.grupo1.sistemabodegaleoapi.model.repository.ImagenProductoRepository;
 import upn.grupo1.sistemabodegaleoapi.model.repository.ProductoRepository;
 import org.springframework.data.domain.Page;
+import upn.grupo1.sistemabodegaleoapi.service.mappers.ProductoServiceMapper;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -80,20 +84,11 @@ public class ProductoService {
                 () -> new RuntimeException("Producto no encontrado")
         );
 
-        AllProductoResponse productoResponse = new AllProductoResponse();
-
-        productoResponse.setIdProducto(producto.getIdProducto());
-        productoResponse.setNombre(producto.getNombre());
-        productoResponse.setDescripcion(producto.getDescripcion());
-        productoResponse.setPrecio(producto.getPrecioUnitario().doubleValue());
-        productoResponse.setCantidad(producto.getStockActual().longValue());
-        productoResponse.setNombreCategoria(producto.getCategoria() != null
-                ? producto.getCategoria().getNombreCategoria()
-                : null);
-
-        if (producto.getImagenes() != null && !producto.getImagenes().isEmpty()) {
-            productoResponse.setImagen(producto.getImagenes().get(0).getUrlImagen());
+        if (!producto.getActivo()) {
+            throw new RuntimeException("Producto no disponible");
         }
+
+        AllProductoResponse productoResponse = ProductoServiceMapper.toAllProducto(producto);
 
         return DataResponse.<AllProductoResponse>builder()
                 .success(true)
@@ -125,6 +120,74 @@ public class ProductoService {
                 .build();
     }
 
+    @Transactional
+    public DataResponse<Object> crearProducto(CrearProductoDto nuevoProducto) {
+        Producto producto = ProductoServiceMapper.toNewProducto(nuevoProducto);
+        productoRepository.save(producto);
+        return DataResponse.builder()
+                .success(true)
+                .message("Producto creado correctamente")
+                .build();
+    }
+
+    @Transactional
+    public DataResponse<Object> cambiarEstadoProducto(Long idProducto) {
+        Producto producto = productoRepository.findById(idProducto).orElseThrow(
+                () -> new RuntimeException("Producto no encontrado")
+        );
+
+        producto.setActivo(!producto.getActivo());
+        productoRepository.save(producto);
+
+        return DataResponse.builder()
+                .success(true)
+                .message("Producto eliminado correctamente")
+                .build();
+    }
+
+    @Transactional
+    public DataResponse<Object> actualizarProducto(Long idProducto, ActualizarProductoDto producto) {
+        Producto productoExistente = productoRepository.findById(idProducto).orElseThrow(
+                () -> new RuntimeException("Producto no encontrado")
+        );
+
+        productoExistente.setNombre(producto.getNombre());
+        productoExistente.setDescripcion(producto.getDescripcion());
+        productoExistente.setPrecioUnitario(producto.getPrecioUnitario());
+
+        productoRepository.save(productoExistente);
+
+        return DataResponse.builder()
+                .success(true)
+                .message("Producto actualizado correctamente")
+                .build();
+    }
+
+    @Transactional
+    public DataResponse<Object> actualizarStockProducto(Long idProducto, ActualizarStockDto producto) {
+        Producto productoExistente = productoRepository.findById(idProducto).orElseThrow(
+                () -> new RuntimeException("Producto no encontrado")
+        );
+
+        Integer stockActual = productoExistente.getStockActual();
+        Integer cantidadActualizar = producto.getStock();
+
+        if (producto.getTipoActualizacion()) {
+            productoExistente.setStockActual(stockActual + cantidadActualizar);
+        } else {
+            if (stockActual - cantidadActualizar < 0) {
+                throw new RuntimeException("El stock no puede ser negativo");
+            }
+            productoExistente.setStockActual(stockActual - cantidadActualizar);
+        }
+
+        productoRepository.save(productoExistente);
+
+        return DataResponse.builder()
+                .success(true)
+                .message("Stock del producto actualizado correctamente")
+                .build();
+    }
 
 
 }

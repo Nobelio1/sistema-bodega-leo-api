@@ -1,4 +1,4 @@
-package upn.grupo1.sistemabodegaleoapi.controller.dto.request;
+package upn.grupo1.sistemabodegaleoapi.controller.dto.request.productoDto;
 
 import jakarta.validation.constraints.Min;
 import lombok.Data;
