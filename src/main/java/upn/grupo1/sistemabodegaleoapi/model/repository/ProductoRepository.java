@@ -1,4 +1,4 @@
-package upn.grupo1.sistemabodegaleoapi.repository;
+package upn.grupo1.sistemabodegaleoapi.model.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

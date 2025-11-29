@@ -7,13 +7,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import upn.grupo1.sistemabodegaleoapi.dto.request.ListarProductoDto;
-import upn.grupo1.sistemabodegaleoapi.dto.response.AllProductoResponse;
-import upn.grupo1.sistemabodegaleoapi.dto.response.DataResponse;
+import upn.grupo1.sistemabodegaleoapi.controller.dto.request.ListarProductoDto;
+import upn.grupo1.sistemabodegaleoapi.controller.dto.response.AllProductoResponse;
+import upn.grupo1.sistemabodegaleoapi.controller.dto.response.DataResponse;
 import upn.grupo1.sistemabodegaleoapi.model.ImagenProducto;
 import upn.grupo1.sistemabodegaleoapi.model.Producto;
-import upn.grupo1.sistemabodegaleoapi.repository.ImagenProductoRepository;
-import upn.grupo1.sistemabodegaleoapi.repository.ProductoRepository;
+import upn.grupo1.sistemabodegaleoapi.model.repository.ImagenProductoRepository;
+import upn.grupo1.sistemabodegaleoapi.model.repository.ProductoRepository;
 import org.springframework.data.domain.Page;
 
 import java.io.IOException;

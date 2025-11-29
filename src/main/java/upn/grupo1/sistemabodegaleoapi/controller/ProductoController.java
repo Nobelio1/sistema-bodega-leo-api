@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import upn.grupo1.sistemabodegaleoapi.dto.request.ListarProductoDto;
-import upn.grupo1.sistemabodegaleoapi.dto.response.AllProductoResponse;
-import upn.grupo1.sistemabodegaleoapi.dto.response.DataResponse;
+import upn.grupo1.sistemabodegaleoapi.controller.dto.request.ListarProductoDto;
+import upn.grupo1.sistemabodegaleoapi.controller.dto.response.AllProductoResponse;
+import upn.grupo1.sistemabodegaleoapi.controller.dto.response.DataResponse;
 import upn.grupo1.sistemabodegaleoapi.service.ProductoService;
 import org.springframework.data.domain.Page;
 
@@ -23,14 +23,14 @@ public class ProductoController {
 
     private final ProductoService productoService;
 
-    @GetMapping("/listar")
+    @GetMapping()
     @Operation(summary = "Listar productos", description = "Obtiene una lista paginada de productos con filtros opcionales")
     public ResponseEntity<DataResponse<Page<AllProductoResponse>>> listarProductos(
             @Valid ListarProductoDto filtros) {
         return ResponseEntity.ok(productoService.listarProductos(filtros));
     }
 
-    @GetMapping("/listar/{id}")
+    @GetMapping("/{id}")
     @Operation(summary = "Listar producto por ID", description = "Obtiene un producto por su ID")
     public ResponseEntity<DataResponse<AllProductoResponse>> productoById(
             @PathVariable Long id) {

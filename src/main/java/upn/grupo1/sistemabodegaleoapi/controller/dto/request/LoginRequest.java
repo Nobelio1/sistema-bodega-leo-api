@@ -1,4 +1,4 @@
-package upn.grupo1.sistemabodegaleoapi.dto.response;
+package upn.grupo1.sistemabodegaleoapi.controller.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthResponse {
-    private String token;
+public class LoginRequest {
+
+    private String nombreUsuario;
+    private String contrasena;
 }

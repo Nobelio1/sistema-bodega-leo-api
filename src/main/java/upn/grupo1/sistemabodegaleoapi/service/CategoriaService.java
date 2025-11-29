@@ -3,10 +3,10 @@ package upn.grupo1.sistemabodegaleoapi.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import upn.grupo1.sistemabodegaleoapi.dto.response.AllCategoriaReponse;
-import upn.grupo1.sistemabodegaleoapi.dto.response.DataResponse;
+import upn.grupo1.sistemabodegaleoapi.controller.dto.response.AllCategoriaReponse;
+import upn.grupo1.sistemabodegaleoapi.controller.dto.response.DataResponse;
 import upn.grupo1.sistemabodegaleoapi.model.Categoria;
-import upn.grupo1.sistemabodegaleoapi.repository.CategoriaRepository;
+import upn.grupo1.sistemabodegaleoapi.model.repository.CategoriaRepository;
 
 import java.util.List;
 

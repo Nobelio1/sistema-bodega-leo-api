@@ -6,11 +6,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import upn.grupo1.sistemabodegaleoapi.config.JwtService;
-import upn.grupo1.sistemabodegaleoapi.dto.request.LoginRequest;
-import upn.grupo1.sistemabodegaleoapi.dto.request.RegisterRequest;
-import upn.grupo1.sistemabodegaleoapi.dto.response.AuthResponse;
+import upn.grupo1.sistemabodegaleoapi.controller.dto.request.LoginRequest;
+import upn.grupo1.sistemabodegaleoapi.controller.dto.request.RegisterRequest;
+import upn.grupo1.sistemabodegaleoapi.controller.dto.response.AuthResponse;
 import upn.grupo1.sistemabodegaleoapi.model.Usuario;
-import upn.grupo1.sistemabodegaleoapi.repository.UsuarioRepository;
+import upn.grupo1.sistemabodegaleoapi.model.repository.UsuarioRepository;
 
 @Service
 @RequiredArgsConstructor
