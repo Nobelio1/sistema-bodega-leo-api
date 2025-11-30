@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import upn.grupo1.sistemabodegaleoapi.model.enums.EstadoPagoEnum;
 import upn.grupo1.sistemabodegaleoapi.model.enums.MetodoEnum;
 
@@ -23,14 +24,25 @@ public class Pago {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPago;
 
+    private Long idPedido;
+
+    @Column(nullable = false)
+    private BigDecimal monto;
+
     @Enumerated(EnumType.STRING)
     private MetodoEnum metodo;
 
+    @Column(unique = true, length = 100)
     private String codigoTransaccion;
-    private BigDecimal monto;
+
+    @CreationTimestamp
     private LocalDateTime fechaPago;
 
     @Enumerated(EnumType.STRING)
     private EstadoPagoEnum estadoPago;
+
+    @ManyToOne
+    @JoinColumn(name = "id_pedido")
+    private Pedido pedido;
 
 }

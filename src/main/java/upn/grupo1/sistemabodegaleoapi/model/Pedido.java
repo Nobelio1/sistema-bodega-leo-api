@@ -36,9 +36,8 @@ public class Pedido {
     @JoinColumn(name = "id_estado")
     private Estado estado;
 
-    @OneToOne
-    @JoinColumn(name = "id_pago")
-    private Pago pago;
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Pago> pagos;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
     private List<DetallePedido> detalles;
