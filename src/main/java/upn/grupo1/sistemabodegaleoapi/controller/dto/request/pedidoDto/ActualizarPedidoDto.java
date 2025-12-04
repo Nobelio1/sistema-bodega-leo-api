@@ -4,7 +4,5 @@ import lombok.Data;
 
 @Data
 public class ActualizarPedidoDto {
-
-    //listaNuevos
-    //listaEliminados
+    private Long idEstado;
 }

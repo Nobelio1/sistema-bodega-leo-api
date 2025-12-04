@@ -18,4 +18,5 @@ public class PagoRes {
     private String metodo;
     private String estadoPago;
     private LocalDateTime fechaPago;
+    private String codigoTransaccion;
 }
