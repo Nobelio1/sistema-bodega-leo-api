@@ -24,8 +24,6 @@ public class Pago {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPago;
 
-    private Long idPedido;
-
     @Column(nullable = false)
     private BigDecimal monto;
 

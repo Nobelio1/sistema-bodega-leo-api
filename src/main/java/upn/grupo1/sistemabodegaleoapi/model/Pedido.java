@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -24,7 +25,9 @@ public class Pedido {
     private Long idPedido;
 
     private LocalDate fechaPedido;
+
     private LocalTime horaPedido;
+
     private BigDecimal montoTotal;
     private String codigoRecojo;
 
