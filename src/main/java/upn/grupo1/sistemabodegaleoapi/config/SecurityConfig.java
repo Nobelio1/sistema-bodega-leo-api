@@ -55,6 +55,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/pago/**").hasAnyAuthority("CLIENTE", "TRABAJADOR", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/pago/**").hasAnyAuthority("TRABAJADOR", "ADMIN")
 
+                        // Endpoints de comprobantes
+                        .requestMatchers(HttpMethod.POST, "/comprobante").hasAnyAuthority("TRABAJADOR", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/comprobante/**").hasAnyAuthority("CLIENTE", "TRABAJADOR", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/comprobante/**").hasAuthority("ADMIN")
+
                         // Endpoints de clientes
                         .requestMatchers("/cliente/**").hasAnyAuthority("TRABAJADOR", "ADMIN")
 
