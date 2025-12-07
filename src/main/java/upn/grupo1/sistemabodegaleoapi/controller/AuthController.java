@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import upn.grupo1.sistemabodegaleoapi.controller.dto.request.LoginRequest;
 import upn.grupo1.sistemabodegaleoapi.controller.dto.request.RegisterRequest;
 import upn.grupo1.sistemabodegaleoapi.controller.dto.response.AuthResponse;
+import upn.grupo1.sistemabodegaleoapi.controller.dto.response.DataResponse;
 import upn.grupo1.sistemabodegaleoapi.service.AuthService;
 
 @RestController
@@ -23,13 +24,13 @@ public class AuthController {
 
     @Operation(summary = "Registra un nuevo usuario", description = "Crea un usuario y devuelve un token JWT")
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<DataResponse<AuthResponse>> register(@RequestBody RegisterRequest request) {
         return ResponseEntity.ok(authService.register(request));
     }
 
     @Operation(summary = "Inicia sesión", description = "Autentica al usuario y devuelve un token JWT")
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<DataResponse<AuthResponse>> login(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
     }
 }

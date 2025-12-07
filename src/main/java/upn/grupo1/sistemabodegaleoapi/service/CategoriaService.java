@@ -1,6 +1,7 @@
 package upn.grupo1.sistemabodegaleoapi.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import upn.grupo1.sistemabodegaleoapi.controller.dto.request.categoriaDto.CrearCategoriaDto;
@@ -18,7 +19,7 @@ public class CategoriaService {
     private final CategoriaRepository categoriaRepository;
 
     @Transactional(readOnly = true)
-    public DataResponse<CategoriaRes> findById(Long id) {
+    public DataResponse<CategoriaRes> findById(@NonNull Long id) {
         Categoria categoria = categoriaRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Categoría no encontrada")
         );
@@ -57,6 +58,7 @@ public class CategoriaService {
     }
 
     @Transactional()
+    @SuppressWarnings("null")
     public DataResponse<Object> crearCategoria(CrearCategoriaDto nuevaCategoria) {
 
         Categoria categoria = Categoria.builder()
@@ -72,7 +74,7 @@ public class CategoriaService {
     }
 
     @Transactional()
-    public DataResponse<Object> eliminarCategoria(Long idCategoria) {
+    public DataResponse<Object> eliminarCategoria(@NonNull Long idCategoria) {
         if (!categoriaRepository.existsById(idCategoria)) {
             return DataResponse.builder()
                     .success(false)
@@ -88,7 +90,7 @@ public class CategoriaService {
     }
 
     @Transactional()
-    public DataResponse<Object> actualizarCategoria(Long idCategoria, CrearCategoriaDto categoria) {
+    public DataResponse<Object> actualizarCategoria(@NonNull Long idCategoria, CrearCategoriaDto categoria) {
 
         Categoria categoriaExistente = categoriaRepository.findById(idCategoria).orElseThrow(
                 () -> new RuntimeException("Categoría no encontrada")
